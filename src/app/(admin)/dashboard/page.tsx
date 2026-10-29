@@ -18,6 +18,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { dashboardApi, type DashboardData } from "@/features/dashboard/api";
+import { brass, organization } from "@/lib/organization";
 
 const numberFormatter = new Intl.NumberFormat();
 
@@ -74,7 +75,9 @@ export default function DashboardPage() {
     };
 
     void loadDashboard();
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [reloadKey]);
 
   const refreshDashboard = useCallback(() => {
@@ -108,7 +111,7 @@ export default function DashboardPage() {
         <span className="mb-5 flex size-14 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
           <XCircle className="size-7" aria-hidden="true" />
         </span>
-        <h1 className="text-2xl font-semibold tracking-tight">Dashboard couldn&apos;t load</h1>
+        <h1 className="text-3xl font-medium tracking-tight">Dashboard couldn&apos;t load</h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           {error || "We couldn’t reach the dashboard service. Check your connection and try again."}
         </p>
@@ -160,9 +163,10 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <section className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Dashboard</h1>
+          <span className="block h-1 w-10 rounded-full" style={{ backgroundColor: brass }} aria-hidden="true" />
+          <h1 className="mt-4 text-4xl font-medium tracking-tight text-foreground sm:text-5xl">Dashboard</h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Monitor recipients and certificate activity from your workspace.
+            Monitor recipients and certificate activity at {organization.name}.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -195,10 +199,10 @@ export default function DashboardPage() {
         className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 xl:grid-cols-4"
       >
         {stats.map(({ label, value, icon: Icon, note, tone }) => (
-          <div key={label} className="flex items-start justify-between gap-4 bg-card p-1 sm:p-6">
+          <div key={label} className="flex items-start justify-between gap-4 bg-card p-5 sm:p-6">
             <div className="min-w-0">
               <p className="text-sm font-medium text-muted-foreground">{label}</p>
-              <p className="mt-3 text-4xl font-semibold tracking-tight tabular-nums text-foreground">
+              <p className="mt-3 font-serif text-5xl font-medium tracking-tight tabular-nums text-foreground">
                 {numberFormatter.format(value)}
               </p>
               <p className="mt-1.5 text-xs text-muted-foreground">{note}</p>
@@ -214,8 +218,8 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0 border-b border-border/70 pb-4">
             <div>
-              <CardTitle className="text-base">Recent certificates</CardTitle>
-              <CardDescription className="mt-1">The latest credentials issued by your organization.</CardDescription>
+              <CardTitle className="font-serif text-xl font-medium tracking-tight">Recent certificates</CardTitle>
+              <CardDescription className="mt-1">The latest credentials issued by {organization.name}.</CardDescription>
             </div>
             <Link
               href="/certificates"
@@ -227,10 +231,14 @@ export default function DashboardPage() {
           <CardContent className="p-0">
             {recentCertificates.length === 0 ? (
               <div className="flex flex-col items-center px-6 py-14 text-center">
-                <span className="mb-4 flex size-12 items-center justify-center rounded-xl bg-muted text-muted-foreground">
-                  <FileCheck2 className="size-6" aria-hidden="true" />
+                <span
+                  className="mb-4 flex size-12 items-center justify-center rounded-full text-white"
+                  style={{ backgroundColor: brass }}
+                  aria-hidden="true"
+                >
+                  <FileCheck2 className="size-6" />
                 </span>
-                <p className="font-medium text-foreground">No certificates yet</p>
+                <p className="font-serif text-xl font-medium">No certificates yet</p>
                 <p className="mt-1 max-w-sm text-sm text-muted-foreground">
                   Issued certificates will appear here. Start by creating one for a registered recipient.
                 </p>
@@ -279,7 +287,7 @@ export default function DashboardPage() {
           {/* Share of valid vs revoked certificates */}
           <Card>
             <CardHeader className="pb-4">
-              <CardTitle className="text-base">Certificate health</CardTitle>
+              <CardTitle className="font-serif text-xl font-medium tracking-tight">Certificate health</CardTitle>
               <CardDescription className="mt-1">
                 {total_certificates === 0
                   ? "Nothing to measure yet."
@@ -314,7 +322,7 @@ export default function DashboardPage() {
 
           <Card>
             <CardHeader className="border-b border-border/70 pb-4">
-              <CardTitle className="text-base">Quick actions</CardTitle>
+              <CardTitle className="font-serif text-xl font-medium tracking-tight">Quick actions</CardTitle>
               <CardDescription className="mt-1">Common tasks for your workspace.</CardDescription>
             </CardHeader>
             <CardContent className="p-2">

@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShieldCheck } from "lucide-react";
 import { cn } from "cn";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Monogram } from "@/components/monogram";
 import { adminNavItems } from "@/components/layout/nav-items";
+import { brass, organization } from "@/lib/organization";
 
 interface MobileNavProps {
   open: boolean;
@@ -18,20 +19,28 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" className="flex h-full w-72 flex-col p-0">
-        <div className="flex h-16 items-center gap-3 border-b border-border px-6">
-          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <ShieldCheck className="size-5" />
+        <Link
+          href="/dashboard"
+          onClick={() => onOpenChange(false)}
+          className="flex h-16 items-center gap-3 border-b border-border px-5"
+        >
+          <Monogram />
+          <span className="min-w-0 leading-tight">
+            <span className="block truncate font-serif text-lg font-medium tracking-tight text-foreground">
+              {organization.name}
+            </span>
+            <span className="block text-xs text-muted-foreground">Certificate workspace</span>
           </span>
-          <div>
-            <Link href="/dashboard" className="font-semibold tracking-tight text-foreground" onClick={() => onOpenChange(false)}>CertiVerify</Link>
-            <p className="text-xs text-muted-foreground">Certificate workspace</p>
-          </div>
-        </div>
+        </Link>
+
         <nav aria-label="Admin navigation" className="flex-1 space-y-1 p-4">
-          <p className="mb-3 px-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Workspace</p>
+          <p className="mb-3 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            Workspace
+          </p>
           {adminNavItems.map((item) => {
             const Icon = item.icon;
-            const isActive = item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isActive =
+              item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             return (
               <Link
@@ -40,11 +49,20 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
                 onClick={() => onOpenChange(false)}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                  isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                  "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
                 )}
               >
-                <Icon className="size-4" />
+                {isActive && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute -left-4 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full"
+                    style={{ backgroundColor: brass }}
+                  />
+                )}
+                <Icon className={cn("size-4", isActive && "text-primary")} />
                 {item.title}
               </Link>
             );

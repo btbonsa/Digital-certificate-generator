@@ -7,9 +7,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-heading: var(--font-serif);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,77 +49,85 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+  CertiVerify palette: ink navy with a brass accent.
+  Navy (#12304F) is the primary color: buttons, logo, focus ring, header strip.
+  Brass (--brass) is for small marks only (seal, logo underline, step badges). Never use it as text:
+  it is about 3.2:1 on white.
+*/
 :root {
-  --background: #F7F9FC;
-  --foreground: #172033;
+  --background: #F5F7FA;
+  --foreground: #0E1B2C;
   --card: #FFFFFF;
-  --card-foreground: #172033;
+  --card-foreground: #0E1B2C;
   --popover: #FFFFFF;
-  --popover-foreground: #172033;
-  --primary: #111827;
+  --popover-foreground: #0E1B2C;
+  --primary: #12304F;
   --primary-foreground: #FFFFFF;
-  --secondary: #F7F9FC;
-  --secondary-foreground: #172033;
-  --muted: #F7F9FC;
-  --muted-foreground: #667085;
-  --accent: #EEF2F7;
-  --accent-foreground: #172033;
+  --secondary: #E8EDF3;
+  --secondary-foreground: #0E1B2C;
+  --muted: #EDF1F6;
+  --muted-foreground: #56667A;
+  --accent: #DCE5EF;
+  --accent-foreground: #0E1B2C;
   --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
-  --border: #E5EAF0;
-  --input: #E5EAF0;
-  --ring: #111827;
-  --success: #16A34A;
+  --border: #DDE3EB;
+  --input: #C9D2DE;
+  --ring: #12304F;
+  --brass: #B8892B;
+  --success: #15803D;
   --warning: #F59E0B;
   --error: #DC2626;
-  --chart-1: #111827;
-  --chart-2: #667085;
-  --chart-3: #F59E0B;
-  --chart-4: #16A34A;
+  --chart-1: #12304F;
+  --chart-2: #4A7BA6;
+  --chart-3: #B8892B;
+  --chart-4: #15803D;
   --chart-5: #DC2626;
   --radius: 0.5rem;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #172033;
-  --sidebar-primary: #111827;
+  --sidebar: #FBFCFD;
+  --sidebar-foreground: #0E1B2C;
+  --sidebar-primary: #12304F;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F7F9FC;
-  --sidebar-accent-foreground: #172033;
-  --sidebar-border: #E5EAF0;
-  --sidebar-ring: #111827;
+  --sidebar-accent: #E8EDF3;
+  --sidebar-accent-foreground: #0E1B2C;
+  --sidebar-border: #DDE3EB;
+  --sidebar-ring: #12304F;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: #FFFFFF;
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #0B1522;
+  --foreground: #EAF0F7;
+  --card: #121F31;
+  --card-foreground: #EAF0F7;
+  --popover: #121F31;
+  --popover-foreground: #EAF0F7;
+  --primary: #A9C4E0;
+  --primary-foreground: #0B1522;
+  --secondary: #1B2A40;
+  --secondary-foreground: #EAF0F7;
+  --muted: #1B2A40;
+  --muted-foreground: #9FB0C4;
+  --accent: #223450;
+  --accent-foreground: #EAF0F7;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: #FFFFFF;
-  --sidebar-primary-foreground: oklch(0.205 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --border: #25364F;
+  --input: #2F425E;
+  --ring: #6F93BA;
+  --brass: #D2A441;
+  --chart-1: #A9C4E0;
+  --chart-2: #6F93BA;
+  --chart-3: #D2A441;
+  --chart-4: #4ADE80;
+  --chart-5: #F87171;
+  --sidebar: #0E1A2B;
+  --sidebar-foreground: #EAF0F7;
+  --sidebar-primary: #A9C4E0;
+  --sidebar-primary-foreground: #0B1522;
+  --sidebar-accent: #1B2A40;
+  --sidebar-accent-foreground: #EAF0F7;
+  --sidebar-border: #25364F;
+  --sidebar-ring: #6F93BA;
 }
 
 @layer base {
@@ -130,5 +139,10 @@
   }
   html {
     @apply font-sans;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
   }
 }

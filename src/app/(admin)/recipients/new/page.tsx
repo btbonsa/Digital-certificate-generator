@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { createRecipientSchema, type CreateRecipientFormData } from "@/features/recipients/schemas";
 import { recipientsApi } from "@/features/recipients/api";
+import { brass } from "@/lib/organization";
 
 function getInitials(name: string) {
   return name
@@ -37,7 +38,8 @@ function Section({
   return (
     <section className="grid gap-6 py-8 first:pt-0 last:pb-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-10">
       <div>
-        <h2 className="font-semibold tracking-tight">{title}</h2>
+        <span className="block h-0.5 w-6 rounded-full" style={{ backgroundColor: brass }} aria-hidden="true" />
+        <h2 className="mt-3 font-serif text-xl font-medium tracking-tight">{title}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{description}</p>
       </div>
       <div className="space-y-6">{children}</div>
@@ -138,7 +140,7 @@ export default function NewRecipientPage() {
           <ArrowLeft className="size-4" aria-hidden="true" />
         </Link>
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground">Add recipient</h1>
+          <h1 className="text-3xl font-medium tracking-tight text-foreground sm:text-4xl">Add recipient</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Add a new certificate recipient. Fields marked * are required.
           </p>

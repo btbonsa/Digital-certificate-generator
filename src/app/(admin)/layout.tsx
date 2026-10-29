@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppHeader } from "@/components/layout/app-header";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { Monogram } from "@/components/monogram";
 import { auth } from "@/lib/auth";
-import { LoaderCircle, ShieldCheck } from "lucide-react";
+import { brass, organization } from "@/lib/organization";
+import { LoaderCircle } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -24,12 +26,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   if (!isAuthenticated) {
     return (
       <main className="flex min-h-dvh items-center justify-center bg-background px-4">
-        <div role="status" className="flex flex-col items-center gap-5 text-center">
-          <span className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
-            <ShieldCheck className="size-6" aria-hidden="true" />
-          </span>
-          <div className="space-y-2">
-            <p className="text-lg font-semibold tracking-tight">CertiVerify</p>
+        <div role="status" className="flex flex-col items-center gap-6 text-center">
+          <Monogram className="size-14 text-lg shadow-lg shadow-primary/20" />
+          <div className="space-y-3">
+            <p className="font-serif text-2xl font-medium tracking-tight">{organization.name}</p>
+            <span
+              aria-hidden="true"
+              className="mx-auto block h-0.5 w-10 rounded-full"
+              style={{ backgroundColor: brass }}
+            />
             <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
               Preparing your workspace…
@@ -59,7 +64,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <main
           id="main-content"
           tabIndex={-1}
-          className="min-h-0 flex-1 overflow-y-auto bg-muted/30 px-4 py-6 focus:outline-none sm:px-6 lg:px-8 lg:py-10"
+          className="min-h-0 flex-1 overflow-y-auto bg-muted/40 px-4 py-6 focus:outline-none sm:px-6 lg:px-8 lg:py-10"
         >
           <div className="mx-auto w-full max-w-7xl">{children}</div>
         </main>

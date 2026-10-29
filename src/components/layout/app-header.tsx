@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LogOut, Menu, ShieldCheck } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,8 +15,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Monogram } from "@/components/monogram";
 import { adminNavItems } from "@/components/layout/nav-items";
 import { auth } from "@/lib/auth";
+import { organization } from "@/lib/organization";
 
 interface AppHeaderProps {
   onMenuClick?: () => void;
@@ -26,7 +28,10 @@ export function AppHeader({ onMenuClick }: AppHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const user = auth.getUser();
-  const currentPage = adminNavItems.find((item) => item.href !== "/" && (pathname === item.href || pathname.startsWith(`${item.href}/`)))?.title ?? "Workspace";
+  const currentPage =
+    adminNavItems.find(
+      (item) => item.href !== "/" && (pathname === item.href || pathname.startsWith(`${item.href}/`))
+    )?.title ?? "Workspace";
   const initials = (user?.name || "Admin")
     .split(/[\s@.]+/)
     .filter(Boolean)
@@ -52,13 +57,13 @@ export function AppHeader({ onMenuClick }: AppHeaderProps) {
         >
           <Menu className="size-5" />
         </Button>
-        <Link href="/dashboard" className="flex items-center gap-2 lg:hidden">
-          <ShieldCheck className="size-5 text-primary" />
-          <span className="font-semibold tracking-tight text-foreground">CertiVerify</span>
+        <Link href="/dashboard" className="flex items-center gap-2 sm:hidden">
+          <Monogram className="size-8 text-xs" />
+          <span className="font-serif text-lg font-medium tracking-tight text-foreground">{organization.shortName}</span>
         </Link>
         <div className="hidden min-w-0 sm:block">
           <p className="text-xs text-muted-foreground">Admin workspace</p>
-          <h1 className="truncate text-sm font-semibold text-foreground">{currentPage}</h1>
+          <h1 className="truncate text-lg font-medium leading-tight tracking-tight text-foreground">{currentPage}</h1>
         </div>
       </div>
 
@@ -67,20 +72,31 @@ export function AppHeader({ onMenuClick }: AppHeaderProps) {
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button type="button" variant="ghost" className="h-10 gap-2 rounded-full px-1.5 sm:px-2" aria-label="Open account menu" />
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-10 gap-2 rounded-full px-1.5 sm:px-2"
+                aria-label="Open account menu"
+              />
             }
           >
             <Avatar className="size-8">
-              <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">{initials || "A"}</AvatarFallback>
+              <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
+                {initials || "A"}
+              </AvatarFallback>
             </Avatar>
-            <span className="hidden max-w-36 truncate text-sm font-medium sm:inline">{user?.name || "Administrator"}</span>
+            <span className="hidden max-w-36 truncate text-sm font-medium sm:inline">
+              {user?.name || "Administrator"}
+            </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-64" align="end">
             <DropdownMenuGroup>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col gap-1">
                   <span className="text-sm font-medium text-foreground">{user?.name || "Administrator"}</span>
-                  <span className="truncate text-xs text-muted-foreground">Administrator account</span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    Administrator, {organization.name}
+                  </span>
                 </div>
               </DropdownMenuLabel>
             </DropdownMenuGroup>

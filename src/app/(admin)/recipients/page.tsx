@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { recipientsApi } from "@/features/recipients/api";
 import type { Recipient } from "@/types/recipient";
+import { brass } from "@/lib/organization";
 import { toast } from "sonner";
 
 const PAGE_SIZE = 20;
@@ -116,8 +117,9 @@ export default function RecipientsPage() {
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground">Recipients</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <span className="block h-1 w-10 rounded-full" style={{ backgroundColor: brass }} aria-hidden="true" />
+          <h1 className="mt-4 text-4xl font-medium tracking-tight text-foreground sm:text-5xl">Recipients</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
             Manage certificate recipients
             {total > 0 && <span> ({total.toLocaleString()} total)</span>}.
           </p>
@@ -170,7 +172,7 @@ export default function RecipientsPage() {
               <span className="mb-4 flex size-12 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
                 <XCircle className="size-6" aria-hidden="true" />
               </span>
-              <p className="font-medium text-foreground">Could not load recipients</p>
+              <p className="font-serif text-xl font-medium text-foreground">Could not load recipients</p>
               <p className="mt-1 text-sm text-muted-foreground">{loadError}</p>
               <Button className="mt-5" variant="outline" onClick={() => runLoad(appliedSearch, page)}>
                 <RefreshCw className="mr-2 size-4" aria-hidden="true" /> Try again
@@ -178,10 +180,22 @@ export default function RecipientsPage() {
             </div>
           ) : recipients.length === 0 ? (
             <div className="flex flex-col items-center px-6 py-16 text-center">
-              <span className="mb-4 flex size-12 items-center justify-center rounded-xl bg-muted text-muted-foreground">
-                <Users className="size-6" aria-hidden="true" />
-              </span>
-              <p className="font-medium text-foreground">{isFiltered ? "No recipients found" : "No recipients yet"}</p>
+              {isFiltered ? (
+                <span className="mb-4 flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                  <Search className="size-6" aria-hidden="true" />
+                </span>
+              ) : (
+                <span
+                  className="mb-4 flex size-12 items-center justify-center rounded-full text-white"
+                  style={{ backgroundColor: brass }}
+                  aria-hidden="true"
+                >
+                  <Users className="size-6" />
+                </span>
+              )}
+              <p className="font-serif text-xl font-medium text-foreground">
+                {isFiltered ? "No recipients found" : "No recipients yet"}
+              </p>
               <p className="mt-1 max-w-sm text-sm text-muted-foreground">
                 {isFiltered
                   ? `Nothing matches “${appliedSearch}”. Check the spelling or clear the search.`
@@ -211,11 +225,17 @@ export default function RecipientsPage() {
               <div aria-busy={searching} className={searching ? "opacity-60 transition-opacity" : "transition-opacity"}>
                 <Table>
                   <TableHeader>
-                    <TableRow className="hover:bg-transparent">
-                      <TableHead className="pl-5">Recipient</TableHead>
-                      <TableHead className="hidden md:table-cell">Email</TableHead>
-                      <TableHead className="hidden lg:table-cell">Phone</TableHead>
-                      <TableHead className="hidden lg:table-cell">Created</TableHead>
+                    <TableRow className="bg-muted/40 hover:bg-muted/40">
+                      <TableHead className="pl-5 text-xs font-semibold uppercase tracking-wider">Recipient</TableHead>
+                      <TableHead className="hidden text-xs font-semibold uppercase tracking-wider md:table-cell">
+                        Email
+                      </TableHead>
+                      <TableHead className="hidden text-xs font-semibold uppercase tracking-wider lg:table-cell">
+                        Phone
+                      </TableHead>
+                      <TableHead className="hidden text-xs font-semibold uppercase tracking-wider lg:table-cell">
+                        Created
+                      </TableHead>
                       <TableHead className="pr-5 text-right">
                         <span className="sr-only">Actions</span>
                       </TableHead>

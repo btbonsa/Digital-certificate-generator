@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { ArrowLeft, Calendar, FileCheck2, Loader2, Mail, Pencil, Phone, XCircle } from "lucide-react";
+import { ArrowLeft, FileCheck2, Loader2, Pencil, XCircle } from "lucide-react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { updateRecipientSchema, type UpdateRecipientFormData } from "@/features/recipients/schemas";
 import { recipientsApi } from "@/features/recipients/api";
 import type { Recipient } from "@/types/recipient";
+import { brass } from "@/lib/organization";
 
 function formatDate(value?: string | null) {
   if (!value) return null;
@@ -64,8 +65,8 @@ function Field({
 function DetailItem({ label, value }: { label: string; value?: string | null }) {
   return (
     <div>
-      <dt className="text-sm text-muted-foreground">{label}</dt>
-      <dd className={`mt-1 font-medium ${value ? "" : "text-muted-foreground"}`}>{value || "Not provided"}</dd>
+      <dt className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</dt>
+      <dd className={`mt-1.5 font-medium ${value ? "" : "text-muted-foreground"}`}>{value || "Not provided"}</dd>
     </div>
   );
 }
@@ -166,7 +167,7 @@ export default function RecipientDetailPage() {
         <span className="mb-5 flex size-14 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
           <XCircle className="size-7" aria-hidden="true" />
         </span>
-        <h1 className="text-2xl font-semibold tracking-tight">Could not load recipient details</h1>
+        <h1 className="text-3xl font-medium tracking-tight">Could not load recipient details</h1>
         <p className="mt-2 text-sm text-muted-foreground">{loadError || "The record may no longer be available."}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Button variant="outline" onClick={() => void loadRecipient()}>
@@ -191,7 +192,7 @@ export default function RecipientDetailPage() {
           <ArrowLeft className="size-4" aria-hidden="true" />
         </Link>
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground">Recipient details</h1>
+          <h1 className="text-3xl font-medium tracking-tight text-foreground sm:text-4xl">Recipient details</h1>
           <p className="mt-1 text-sm text-muted-foreground">View and manage recipient information.</p>
         </div>
       </div>
@@ -205,18 +206,20 @@ export default function RecipientDetailPage() {
                 {recipient.profile_image_url && (
                   <AvatarImage src={recipient.profile_image_url} alt={`${recipient.full_name} profile photo`} />
                 )}
-                <AvatarFallback className="bg-primary text-2xl font-semibold text-primary-foreground">
+                <AvatarFallback className="bg-primary font-serif text-3xl font-medium text-primary-foreground">
                   {getInitials(recipient.full_name)}
                 </AvatarFallback>
               </Avatar>
-              <h2 className="mt-4 text-xl font-semibold tracking-tight">{recipient.full_name}</h2>
+              <span
+                className="mt-5 block h-0.5 w-8 rounded-full"
+                style={{ backgroundColor: brass }}
+                aria-hidden="true"
+              />
+              <h2 className="mt-3 font-serif text-2xl font-medium tracking-tight">{recipient.full_name}</h2>
               {recipient.email && <p className="mt-1 break-all text-sm text-muted-foreground">{recipient.email}</p>}
             </div>
 
-            <Link
-              href="/certificates/issue"
-              className={`${buttonVariants({ variant: "default" })} w-full`}
-            >
+            <Link href="/certificates/issue" className={`${buttonVariants({ variant: "default" })} w-full`}>
               <FileCheck2 className="mr-2 size-4" aria-hidden="true" /> Issue certificate
             </Link>
 
@@ -237,7 +240,7 @@ export default function RecipientDetailPage() {
         <Card>
           <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0 border-b border-border/70 pb-4">
             <div>
-              <CardTitle>Contact information</CardTitle>
+              <CardTitle className="font-serif text-xl font-medium tracking-tight">Contact information</CardTitle>
               <CardDescription className="mt-1">
                 {isEditing ? "Update recipient information." : "Recipient contact details."}
               </CardDescription>
