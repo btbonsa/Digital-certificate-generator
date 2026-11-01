@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -27,26 +27,35 @@ export default function CertificateDetailPage() {
   const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const isMounted = useRef(true);
 
   const loadCertificate = useCallback(async () => {
-    setLoading(true);
     setLoadError(null);
     try {
       const id = Number(params.id);
       if (!Number.isInteger(id) || id < 1) throw new Error("Invalid record ID");
       const data = await certificatesApi.get(id);
-      setCertificate(data);
+      if (isMounted.current) {
+        setCertificate(data);
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to load certificate";
-      setLoadError(message);
-      toast.error(message);
+      if (isMounted.current) {
+        setLoadError(message);
+        toast.error(message);
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
   }, [params.id]);
 
   useEffect(() => {
     void loadCertificate();
+    return () => {
+      isMounted.current = false;
+    };
   }, [loadCertificate]);
 
   const getVerificationUrl = () => {

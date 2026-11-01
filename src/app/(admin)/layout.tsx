@@ -13,15 +13,13 @@ import { LoaderCircle } from "lucide-react";
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isAuthenticated = auth.isAuthenticated();
 
   useEffect(() => {
-    if (!auth.isAuthenticated()) {
+    if (!isAuthenticated) {
       router.replace("/login");
-      return;
     }
-    setIsAuthenticated(true);
-  }, [router]);
+  }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
     return (
@@ -64,9 +62,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <main
           id="main-content"
           tabIndex={-1}
-          className="min-h-0 flex-1 overflow-y-auto bg-muted/40 px-4 py-6 focus:outline-none sm:px-6 lg:px-8 lg:py-10"
+          className="min-h-0 min-w-0 flex-1 overflow-y-auto bg-muted/40 px-4 py-6 focus:outline-none sm:px-6 lg:px-8 lg:py-10"
         >
-          <div className="mx-auto w-full max-w-7xl">{children}</div>
+          <div className="mx-auto w-full min-w-0 max-w-7xl">{children}</div>
         </main>
       </div>
     </div>

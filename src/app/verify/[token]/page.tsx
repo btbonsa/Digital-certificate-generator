@@ -114,14 +114,18 @@ export default function VerifyPage() {
     const token = Array.isArray(rawToken) ? rawToken[0] : rawToken;
 
     if (!token) {
-      setState("not_found");
-      setError("Invalid verification token");
+      if (active) {
+        setState("not_found");
+        setError("Invalid verification token");
+      }
       return;
     }
 
     const verifyCertificate = async () => {
-      setState("loading");
-      setError("");
+      if (active) {
+        setState("loading");
+        setError("");
+      }
       try {
         const result = await verificationApi.verify(token);
         if (!active) return;

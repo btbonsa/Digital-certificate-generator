@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Eye, Plus, RefreshCw, Search, Users, X, XCircle } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -43,27 +43,37 @@ export default function RecipientsPage() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(PAGE_SIZE);
+  const isMounted = useRef(true);
 
   const loadRecipients = useCallback(async (search?: string, requestedPage = 1) => {
     try {
       const response = await recipientsApi.list(search, requestedPage, PAGE_SIZE);
-      setRecipients(response.recipients);
-      setPage(response.page);
-      setTotal(response.total);
-      setLimit(response.limit || PAGE_SIZE);
-      setLoadError(null);
+      if (isMounted.current) {
+        setRecipients(response.recipients);
+        setPage(response.page);
+        setTotal(response.total);
+        setLimit(response.limit || PAGE_SIZE);
+        setLoadError(null);
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to load recipients";
-      setLoadError(message);
-      toast.error(message);
+      if (isMounted.current) {
+        setLoadError(message);
+        toast.error(message);
+      }
     } finally {
-      setLoading(false);
-      setSearching(false);
+      if (isMounted.current) {
+        setLoading(false);
+        setSearching(false);
+      }
     }
   }, []);
 
   useEffect(() => {
     void loadRecipients();
+    return () => {
+      isMounted.current = false;
+    };
   }, [loadRecipients]);
 
   const runLoad = (search: string, requestedPage: number) => {
@@ -227,9 +237,7 @@ export default function RecipientsPage() {
                   <TableHeader>
                     <TableRow className="bg-muted/40 hover:bg-muted/40">
                       <TableHead className="pl-5 text-xs font-semibold uppercase tracking-wider">Recipient</TableHead>
-                      <TableHead className="hidden text-xs font-semibold uppercase tracking-wider md:table-cell">
-                        Email
-                      </TableHead>
+                 
                       <TableHead className="hidden text-xs font-semibold uppercase tracking-wider lg:table-cell">
                         Phone
                       </TableHead>
@@ -258,15 +266,11 @@ export default function RecipientsPage() {
                               >
                                 {recipient.full_name}
                               </Link>
-                              {recipient.email && (
-                                <p className="truncate text-xs text-muted-foreground md:hidden">{recipient.email}</p>
-                              )}
+                             
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {recipient.email || <span className="text-muted-foreground">—</span>}
-                        </TableCell>
+                      
                         <TableCell className="hidden lg:table-cell">
                           {recipient.phone || <span className="text-muted-foreground">—</span>}
                         </TableCell>

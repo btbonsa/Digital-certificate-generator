@@ -1,23 +1,6 @@
 import type { Metadata } from "next";
-import { Figtree, Newsreader, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-
-const figtree = Figtree({
-  subsets: ["latin"],
-  variable: "--font-figtree",
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  variable: "--font-newsreader",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-});
 
 export const metadata: Metadata = {
   title: "CertiVerify - Digital Certificate Generation and Verification",
@@ -29,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${figtree.variable} ${newsreader.variable} ${geistMono.variable} antialiased`}
+      className="antialiased"
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground">

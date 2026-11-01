@@ -18,7 +18,7 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="flex h-full w-72 flex-col p-0">
+      <SheetContent side="left" className="flex h-full w-72 max-w-72 flex-col p-0">
         <Link
           href="/dashboard"
           onClick={() => onOpenChange(false)}

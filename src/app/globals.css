@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -7,10 +8,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-heading: var(--font-serif);
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -40,6 +41,11 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-brass: var(--brass);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -50,84 +56,93 @@
 }
 
 /*
-  CertiVerify palette: ink navy with a brass accent.
-  Navy (#12304F) is the primary color: buttons, logo, focus ring, header strip.
-  Brass (--brass) is for small marks only (seal, logo underline, step badges). Never use it as text:
-  it is about 3.2:1 on white.
+  CertiVerify palette: forest green.
+  Core greens: #5C7057 (primary), #89A482, #ACC5A6, #D1EDD3.
+  Primary (#5C7057) is used for buttons, logo, focus ring and the header strip.
+  White text on primary is about 5.4:1, which passes accessibility contrast.
+  --brass is used only for decoration (the certificate seal and its thin border).
+  Never use it as text: it is about 3.2:1 on white.
 */
 :root {
-  --background: #F5F7FA;
-  --foreground: #0E1B2C;
+  --background: #F7FAF7;
+  --foreground: #1F2A1E;
   --card: #FFFFFF;
-  --card-foreground: #0E1B2C;
+  --card-foreground: #1F2A1E;
   --popover: #FFFFFF;
-  --popover-foreground: #0E1B2C;
-  --primary: #12304F;
+  --popover-foreground: #1F2A1E;
+  --primary: #5C7057;
   --primary-foreground: #FFFFFF;
-  --secondary: #E8EDF3;
-  --secondary-foreground: #0E1B2C;
-  --muted: #EDF1F6;
-  --muted-foreground: #56667A;
-  --accent: #DCE5EF;
-  --accent-foreground: #0E1B2C;
-  --destructive: #DC2626;
+  --secondary: #E6EFE5;
+  --secondary-foreground: #1F2A1E;
+  --muted: #EDF4EC;
+  --muted-foreground: #5B685A;
+  --accent: #D1EDD3;
+  --accent-foreground: #25301F;
+  --destructive: #B91C1C;
   --destructive-foreground: #FFFFFF;
-  --border: #DDE3EB;
-  --input: #C9D2DE;
-  --ring: #12304F;
+  --border: #DBE5DA;
+  --input: #C3D3C1;
+  --ring: #5C7057;
   --brass: #B8892B;
-  --success: #15803D;
+  --success: #2F7D41;
+  --success-foreground: #FFFFFF;
   --warning: #F59E0B;
-  --error: #DC2626;
-  --chart-1: #12304F;
-  --chart-2: #4A7BA6;
+  --warning-foreground: #7A4F00;
+  --error: #B91C1C;
+  --chart-1: #5C7057;
+  --chart-2: #89A482;
   --chart-3: #B8892B;
-  --chart-4: #15803D;
-  --chart-5: #DC2626;
+  --chart-4: #2F7D41;
+  --chart-5: #B91C1C;
   --radius: 0.5rem;
-  --sidebar: #FBFCFD;
-  --sidebar-foreground: #0E1B2C;
-  --sidebar-primary: #12304F;
+  --sidebar: #FBFDFB;
+  --sidebar-foreground: #1F2A1E;
+  --sidebar-primary: #5C7057;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #E8EDF3;
-  --sidebar-accent-foreground: #0E1B2C;
-  --sidebar-border: #DDE3EB;
-  --sidebar-ring: #12304F;
+  --sidebar-accent: #E6EFE5;
+  --sidebar-accent-foreground: #1F2A1E;
+  --sidebar-border: #DBE5DA;
+  --sidebar-ring: #5C7057;
 }
 
 .dark {
-  --background: #0B1522;
-  --foreground: #EAF0F7;
-  --card: #121F31;
-  --card-foreground: #EAF0F7;
-  --popover: #121F31;
-  --popover-foreground: #EAF0F7;
-  --primary: #A9C4E0;
-  --primary-foreground: #0B1522;
-  --secondary: #1B2A40;
-  --secondary-foreground: #EAF0F7;
-  --muted: #1B2A40;
-  --muted-foreground: #9FB0C4;
-  --accent: #223450;
-  --accent-foreground: #EAF0F7;
+  --background: #0A0A0B;
+  --foreground: #F4F4F5;
+  --card: #141415;
+  --card-foreground: #F4F4F5;
+  --popover: #141415;
+  --popover-foreground: #F4F4F5;
+  --primary: #ACC5A6;
+  --primary-foreground: #0A0A0B;
+  --secondary: #1C1C1F;
+  --secondary-foreground: #F4F4F5;
+  --muted: #1C1C1F;
+  --muted-foreground: #A1A1AA;
+  --accent: #27272A;
+  --accent-foreground: #F4F4F5;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: #25364F;
-  --input: #2F425E;
-  --ring: #6F93BA;
+  --border: #27272A;
+  --input: #3A3A3F;
+  --ring: #89A482;
   --brass: #D2A441;
-  --chart-1: #A9C4E0;
-  --chart-2: #6F93BA;
+  --success: #4ADE80;
+  --success-foreground: #0A0A0B;
+  --warning: #FBBF24;
+  --warning-foreground: #FCD34D;
+  --error: #F87171;
+  --chart-1: #ACC5A6;
+  --chart-2: #89A482;
   --chart-3: #D2A441;
   --chart-4: #4ADE80;
   --chart-5: #F87171;
-  --sidebar: #0E1A2B;
-  --sidebar-foreground: #EAF0F7;
-  --sidebar-primary: #A9C4E0;
-  --sidebar-primary-foreground: #0B1522;
-  --sidebar-accent: #1B2A40;
-  --sidebar-accent-foreground: #EAF0F7;
-  --sidebar-border: #25364F;
-  --sidebar-ring: #6F93BA;
+  --sidebar: #09090A;
+  --sidebar-foreground: #F4F4F5;
+  --sidebar-primary: #ACC5A6;
+  --sidebar-primary-foreground: #0A0A0B;
+  --sidebar-accent: #1C1C1F;
+  --sidebar-accent-foreground: #F4F4F5;
+  --sidebar-border: #27272A;
+  --sidebar-ring: #89A482;
 }
 
 @layer base {
@@ -144,5 +159,29 @@
   h2,
   h3 {
     font-family: var(--font-heading);
+  }
+}
+
+/* Landing page: seal stamp animation (it ends at the seal's own -rotate-12) */
+@keyframes cv-stamp {
+  0% { opacity: 0; transform: scale(1.9) rotate(-14deg); }
+  60% { opacity: 1; transform: scale(0.94) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@layer components {
+  /* Fine crossed lines, like the pattern printed on security paper */
+  .security-paper {
+    background-image:
+      repeating-linear-gradient(45deg, currentColor 0 1px, transparent 1px 16px),
+      repeating-linear-gradient(-45deg, currentColor 0 1px, transparent 1px 16px);
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 90%);
+    mask-image: linear-gradient(to bottom, black, transparent 90%);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cv-seal {
+      animation: cv-stamp 700ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 450ms both;
+    }
   }
 }

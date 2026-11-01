@@ -194,25 +194,28 @@ export default function DashboardPage() {
       )}
 
       {/* Stats: one connected strip instead of four separate cards */}
-      <section
-        aria-label="Certificate statistics"
-        className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 xl:grid-cols-4"
-      >
-        {stats.map(({ label, value, icon: Icon, note, tone }) => (
-          <div key={label} className="flex items-start justify-between gap-4 bg-card p-5 sm:p-6">
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-muted-foreground">{label}</p>
-              <p className="mt-3 font-serif text-5xl font-medium tracking-tight tabular-nums text-foreground">
-                {numberFormatter.format(value)}
-              </p>
-              <p className="mt-1.5 text-xs text-muted-foreground">{note}</p>
-            </div>
-            <span className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${tone}`}>
-              <Icon className="size-5" aria-hidden="true" />
-            </span>
-          </div>
-        ))}
-      </section>
+<section
+  aria-label="Certificate statistics"
+  className="grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4"
+>
+  {stats.map(({ label, value, icon: Icon, note, tone }) => (
+    <div
+      key={label}
+      className="flex items-start justify-between gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6"
+    >
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-muted-foreground">{label}</p>
+        <p className="mt-3 font-serif text-4xl font-medium tracking-tight tabular-nums text-foreground sm:text-5xl">
+          {numberFormatter.format(value)}
+        </p>
+        <p className="mt-1.5 text-xs text-muted-foreground">{note}</p>
+      </div>
+      <span className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${tone}`}>
+        <Icon className="size-5" aria-hidden="true" />
+      </span>
+    </div>
+  ))}
+</section>
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.8fr)]">
         <Card>

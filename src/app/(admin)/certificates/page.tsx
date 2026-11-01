@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import {
   ChevronLeft,
@@ -48,27 +48,37 @@ export default function CertificatesPage() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(PAGE_SIZE);
+  const isMounted = useRef(true);
 
   const loadCertificates = useCallback(async (search?: string, status?: string, requestedPage = 1) => {
     try {
       const response = await certificatesApi.list(search, status, requestedPage, PAGE_SIZE);
-      setCertificates(response.certificates);
-      setPage(response.page);
-      setTotal(response.total);
-      setLimit(response.limit || PAGE_SIZE);
-      setLoadError(null);
+      if (isMounted.current) {
+        setCertificates(response.certificates);
+        setPage(response.page);
+        setTotal(response.total);
+        setLimit(response.limit || PAGE_SIZE);
+        setLoadError(null);
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to load certificates";
-      setLoadError(message);
-      toast.error(message);
+      if (isMounted.current) {
+        setLoadError(message);
+        toast.error(message);
+      }
     } finally {
-      setLoading(false);
-      setSearching(false);
+      if (isMounted.current) {
+        setLoading(false);
+        setSearching(false);
+      }
     }
   }, []);
 
   useEffect(() => {
     void loadCertificates();
+    return () => {
+      isMounted.current = false;
+    };
   }, [loadCertificates]);
 
   const runLoad = (search: string, status: string, requestedPage: number) => {
@@ -263,69 +273,119 @@ export default function CertificatesPage() {
               )}
 
               <div aria-busy={searching} className={searching ? "opacity-60 transition-opacity" : "transition-opacity"}>
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-muted/40 hover:bg-muted/40">
-                      <TableHead className="pl-5 text-xs font-semibold uppercase tracking-wider">Number</TableHead>
-                      <TableHead className="text-xs font-semibold uppercase tracking-wider">Certificate</TableHead>
-                      <TableHead className="hidden text-xs font-semibold uppercase tracking-wider lg:table-cell">
-                        Issued
-                      </TableHead>
-                      <TableHead className="text-xs font-semibold uppercase tracking-wider">Status</TableHead>
-                      <TableHead className="pr-5 text-right">
-                        <span className="sr-only">Actions</span>
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
+                <div className="space-y-3 p-4 md:hidden">
                     {certificates.map((certificate) => (
-                      <TableRow key={certificate.id}>
-                        <TableCell className="pl-5">
-                          <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+                      <article
+                        key={certificate.id}
+                        className="rounded-xl border border-border bg-background p-4"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <span className="min-w-0 break-all rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
                             {certificate.certificate_number}
                           </span>
-                        </TableCell>
-                        <TableCell>
+                          <StatusBadge status={certificate.status} />
+                        </div>
+                        <div className="mt-3 min-w-0">
                           <Link
                             href={`/certificates/${certificate.id}`}
-                            className="block truncate font-medium text-foreground hover:underline"
+                            className="block break-words font-medium text-foreground hover:underline"
                           >
                             {certificate.title}
                           </Link>
-                          <p className="truncate text-xs text-muted-foreground">
+                          <p className="mt-1 break-words text-sm text-muted-foreground">
                             {certificate.recipient_name || "Unknown recipient"}
                           </p>
-                        </TableCell>
-                        <TableCell className="hidden text-muted-foreground lg:table-cell">
-                          {formatDate(certificate.issue_date)}
-                        </TableCell>
-                        <TableCell>
-                          <StatusBadge status={certificate.status} />
-                        </TableCell>
-                        <TableCell className="pr-5 text-right">
-                          <div className="flex justify-end gap-1">
+                        </div>
+                        <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-3">
+                          <span className="text-xs text-muted-foreground">{formatDate(certificate.issue_date)}</span>
+                          <div className="flex shrink-0 items-center gap-1">
                             <Link
                               href={`/certificates/${certificate.id}`}
-                              aria-label={`View certificate ${certificate.certificate_number}`}
-                              className={buttonVariants({ variant: "ghost", size: "icon" })}
+                              className={buttonVariants({ variant: "outline", size: "sm" })}
                             >
-                              <Eye className="size-4" aria-hidden="true" />
+                              <Eye className="mr-1.5 size-4" aria-hidden="true" /> View
                             </Link>
                             <Button
                               type="button"
-                              variant="ghost"
-                              size="icon"
-                              aria-label={`Download certificate ${certificate.certificate_number}`}
+                              variant="outline"
+                              size="sm"
                               onClick={() => handleDownloadPdf(certificate.id, certificate.certificate_number)}
                             >
-                              <Download className="size-4" aria-hidden="true" />
+                              <Download className="mr-1.5 size-4" aria-hidden="true" /> PDF
                             </Button>
                           </div>
-                        </TableCell>
-                      </TableRow>
+                        </div>
+                      </article>
                     ))}
-                  </TableBody>
-                </Table>
+                </div>
+
+                <div className="hidden md:block">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted/40 hover:bg-muted/40">
+                          <TableHead className="pl-5 text-xs font-semibold uppercase tracking-wider">Number</TableHead>
+                          <TableHead className="text-xs font-semibold uppercase tracking-wider">Certificate</TableHead>
+                          <TableHead className="hidden text-xs font-semibold uppercase tracking-wider lg:table-cell">
+                            Issued
+                          </TableHead>
+                          <TableHead className="text-xs font-semibold uppercase tracking-wider">Status</TableHead>
+                          <TableHead className="pr-5 text-right">
+                            <span className="sr-only">Actions</span>
+                          </TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {certificates.map((certificate) => (
+                          <TableRow key={certificate.id}>
+                            <TableCell className="pl-5">
+                              <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
+                                {certificate.certificate_number}
+                              </span>
+                            </TableCell>
+                            <TableCell>
+                              <Link
+                                href={`/certificates/${certificate.id}`}
+                                className="block truncate font-medium text-foreground hover:underline"
+                              >
+                                {certificate.title}
+                              </Link>
+                              <p className="truncate text-xs text-muted-foreground">
+                                {certificate.recipient_name || "Unknown recipient"}
+                              </p>
+                            </TableCell>
+                            <TableCell className="hidden text-muted-foreground lg:table-cell">
+                              {formatDate(certificate.issue_date)}
+                            </TableCell>
+                            <TableCell>
+                              <StatusBadge status={certificate.status} />
+                            </TableCell>
+                            <TableCell className="pr-5 text-right">
+                              <div className="flex justify-end gap-1">
+                                <Link
+                                  href={`/certificates/${certificate.id}`}
+                                  aria-label={`View certificate ${certificate.certificate_number}`}
+                                  className={buttonVariants({ variant: "ghost", size: "icon" })}
+                                >
+                                  <Eye className="size-4" aria-hidden="true" />
+                                </Link>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label={`Download certificate ${certificate.certificate_number}`}
+                                  onClick={() =>
+                                    handleDownloadPdf(certificate.id, certificate.certificate_number)
+                                  }
+                                >
+                                  <Download className="size-4" aria-hidden="true" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                </div>
               </div>
 
               {total > limit && (

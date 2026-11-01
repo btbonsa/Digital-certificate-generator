@@ -76,11 +76,8 @@ export default function Login() {
 
         <main className="flex flex-1 items-center justify-center px-4 py-10 sm:px-8">
           <div className="w-full max-w-sm">
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">Staff sign-in</p>
             <h1 className="mt-3 text-4xl font-medium tracking-tight">Admin login</h1>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Enter your credentials to issue and manage certificates.
-            </p>
+          
 
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-5" noValidate>
               <div className="space-y-2">
@@ -149,16 +146,7 @@ export default function Login() {
               </Button>
             </form>
 
-            <p className="mt-6 text-sm text-muted-foreground">
-              Need access? Contact{" "}
-              <a
-                href={`mailto:${organization.contactEmail}`}
-                className="font-medium text-foreground underline-offset-4 hover:underline"
-              >
-                {organization.contactEmail}
-              </a>
-              .
-            </p>
+            
           </div>
         </main>
 

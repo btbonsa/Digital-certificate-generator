@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -77,12 +77,12 @@ export default function RecipientDetailPage() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const isMounted = useRef(true);
 
   const form = useForm<UpdateRecipientFormData>({
     resolver: zodResolver(updateRecipientSchema),
     defaultValues: {
       full_name: "",
-      email: "",
       phone: "",
       date_of_birth: "",
       profile_image_url: "",
@@ -93,26 +93,31 @@ export default function RecipientDetailPage() {
 
   const loadRecipient = useCallback(
     async (showSpinner = true) => {
-      if (showSpinner) setLoading(true);
+      if (showSpinner && isMounted.current) setLoading(true);
       setLoadError(null);
       try {
         const id = Number(params.id);
         if (!Number.isInteger(id) || id < 1) throw new Error("Invalid record ID");
         const data = await recipientsApi.get(id);
-        setRecipient(data);
-        reset({
-          full_name: data.full_name,
-          email: data.email || "",
-          phone: data.phone || "",
-          date_of_birth: data.date_of_birth || "",
-          profile_image_url: data.profile_image_url || "",
-        });
+        if (isMounted.current) {
+          setRecipient(data);
+          reset({
+            full_name: data.full_name,
+            phone: data.phone || "",
+            date_of_birth: data.date_of_birth || "",
+            profile_image_url: data.profile_image_url || "",
+          });
+        }
       } catch (error) {
         const message = error instanceof Error ? error.message : "Failed to load recipient";
-        setLoadError(message);
-        toast.error(message);
+        if (isMounted.current) {
+          setLoadError(message);
+          toast.error(message);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted.current) {
+          setLoading(false);
+        }
       }
     },
     [params.id, reset],
@@ -120,6 +125,9 @@ export default function RecipientDetailPage() {
 
   useEffect(() => {
     void loadRecipient();
+    return () => {
+      isMounted.current = false;
+    };
   }, [loadRecipient]);
 
   const onSubmit = async (data: UpdateRecipientFormData) => {
@@ -128,7 +136,6 @@ export default function RecipientDetailPage() {
       const cleanedData = {
         ...data,
         full_name: data.full_name?.trim(),
-        email: data.email || undefined,
         phone: data.phone || undefined,
         date_of_birth: data.date_of_birth || undefined,
         profile_image_url: data.profile_image_url || undefined,
@@ -216,7 +223,6 @@ export default function RecipientDetailPage() {
                 aria-hidden="true"
               />
               <h2 className="mt-3 font-serif text-2xl font-medium tracking-tight">{recipient.full_name}</h2>
-              {recipient.email && <p className="mt-1 break-all text-sm text-muted-foreground">{recipient.email}</p>}
             </div>
 
             <Link href="/certificates/issue" className={`${buttonVariants({ variant: "default" })} w-full`}>
@@ -266,16 +272,7 @@ export default function RecipientDetailPage() {
                 </Field>
 
                 <div className="grid gap-6 sm:grid-cols-2">
-                  <Field id="email" label="Email" error={errors.email?.message}>
-                    <Input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
-                      aria-invalid={!!errors.email}
-                      aria-describedby={errors.email ? "email-error" : undefined}
-                      {...form.register("email")}
-                    />
-                  </Field>
+              
                   <Field id="phone" label="Phone" error={errors.phone?.message}>
                     <Input
                       id="phone"
@@ -330,7 +327,6 @@ export default function RecipientDetailPage() {
             ) : (
               <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
                 <DetailItem label="Full name" value={recipient.full_name} />
-                <DetailItem label="Email" value={recipient.email} />
                 <DetailItem label="Phone" value={recipient.phone} />
                 <DetailItem label="Date of birth" value={formatDate(recipient.date_of_birth)} />
               </dl>
